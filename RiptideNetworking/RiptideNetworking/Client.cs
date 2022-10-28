@@ -394,10 +394,13 @@ namespace Riptide
             ushort messageId = message.GetUShort();
             MessageReceived?.Invoke(this, new MessageReceivedEventArgs(connection, messageId, message));
 
+            //Refuses to work properly on 3.5, why?
+#if !NET35
             if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
                 messageHandler(message);
             else
                 RiptideLogger.Log(LogType.Warning, LogName, $"No message handler method found for message ID {messageId}!");
+#endif
         }
 
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>

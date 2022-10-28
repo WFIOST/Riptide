@@ -551,10 +551,13 @@ namespace Riptide
 
             MessageReceived?.Invoke(this, new MessageReceivedEventArgs(fromConnection, messageId, message));
 
+            //Still 0 clue why this doesn't work on 3.5
+#if !NET35
             if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
                 messageHandler(fromConnection.Id, message);
             else
                 RiptideLogger.Log(LogType.Warning, LogName, $"No message handler method found for message ID {messageId}!");
+#endif
         }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
